@@ -6,12 +6,12 @@ const morgan = require('morgan')
 
 const app = express()
 
-// serve static files from project root (index.html, css, js, assets)
-app.use(express.static(path.join(__dirname)))
+// serve static files from /public
+app.use(express.static(path.join(__dirname, 'public')))
 
-// ensure root serves index.html
+// ensure root serves public/index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
 app.set('trust proxy', 'loopback')

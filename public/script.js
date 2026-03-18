@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000'
+const API_BASE_URL = window.location.origin
 
 const cities = []
 let chartData = null
@@ -267,7 +267,7 @@ const searchCities = (query) => {
 
 const loadCities = async () => {
   try {
-    const response = await fetch('cities.json')
+    const response = await fetch('/cities.json')
 
     if (!response.ok) {
       throw new Error(`No se pudo cargar cities.json (${response.status})`)
