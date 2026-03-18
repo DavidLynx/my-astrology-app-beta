@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Astrology App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+</head>
+<body>
+  <div class="background-stars"></div>
+
+  <main class="page">
+    <header class="hero">
+      <div class="hero__eyebrow">Versión beta · Herramienta interactiva de astrología</div>
+      <div class="logo-title">
+        <img src="assets/logo.svg" class="logo">
+        <h1>My Astrology App</h1>
+      </div>
+      <p>
+        Ingresa tus datos de nacimiento para consultar la API y visualizar una
+        carta natal de forma clara y elegante.
+      </p>
+    </header>
+
+    <section class="card form-card" aria-labelledby="form-title">
+      <h2 id="form-title" class="section-title">Datos de nacimiento</h2>
+      <p class="section-text">
+        Puedes escribir una ciudad para autocompletar latitud, longitud y zona horaria,
+        o llenar esos campos manualmente.
+      </p>
+
+      <form id="birth-form" novalidate>
+        <div class="form-grid">
+          <div class="field field--full city-field">
+            <label for="city-search">Ciudad</label>
+            <input id="city-search"
+                   type="text"
+                   placeholder="Comienza a escribir una ciudad..."
+                   autocomplete="off">
+            <div id="city-results"></div>
+          </div>
+
+          <div class="field">
+            <label for="latitude">Latitud</label>
+            <input id="latitude"
+                   type="number"
+                   step="any"
+                   placeholder="4.7110">
+          </div>
+
+          <div class="field">
+            <label for="longitude">Longitud</label>
+            <input id="longitude"
+                   type="number"
+                   step="any"
+                   placeholder="-74.0721">
+          </div>
+
+          <div class="field">
+            <label for="utc-offset">Zona horaria</label>
+            <input id="utc-offset"
+                   type="text"
+                   placeholder="-05:00">
+          </div>
+
+          <div class="field">
+            <label for="birth-date">Fecha</label>
+            <input id="birth-date"
+                   type="date">
+          </div>
+
+          <div class="field">
+            <label for="birth-time">Hora</label>
+            <input id="birth-time"
+                   type="time"
+                   step="60">
+          </div>
+
+          <div class="field">
+            <label for="house-system">Sistema de casas</label>
+            <select id="house-system">
+              <option value="P" selected>Placidus</option>
+              <option value="W">Whole Sign</option>
+              <option value="K">Koch</option>
+              <option value="R">Regiomontanus</option>
+              <option value="C">Campanus</option>
+              <option value="O">Porphyry</option>
+            </select>
+          </div>
+
+          <div class="field field--full">
+            <p class="field-hint">
+              Si tu ciudad no aparece, puedes ingresar latitud, longitud y zona horaria manualmente.
+            </p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="submit-btn" type="submit" class="btn btn-primary">
+            Calcular carta
+          </button>
+          <button type="reset" class="btn btn-secondary">
+            Limpiar
+          </button>
+        </div>
+
+        <div id="form-status" class="status" aria-live="polite">
+          Completa los campos para consultar la API.
+        </div>
+      </form>
+    </section>
+    <footer class="app-footer">
+      <div class="footer-content">
+        <h3>My Astrology App</h3>
+        <p>Interfaz visual para explorar y comprender cartas natales.</p>
+        <p>© 2026 My Astrology App. Todos los derechos reservados.</p>
+        <p>Contáctanos por WhatsApp: <strong>+57 305 408 7778</strong></p>
+        <p class="footer-note">
+          Esta herramienta ofrece cálculos y visualizaciones astrológicas con fines educativos e interpretativos.
+        </p>
+      </div>
+    </footer>
+
+      <div class="chart-actions">
+      <button id="download-pdf">Descargar PDF</button>
+      <a 
+        class="whatsapp-button"
+        href="https://wa.me/573054087778?text=Hola,%20quiero%20una%20lectura%20astrol%C3%B3gica"
+        target="_blank"
+      >
+        Contactar por WhatsApp
+      </a>
+    </div>
+
+
+    <div id="pdf-content">
+    <section class="chart-stage">
+      <div id="result-container" class="card chart-card">
+        <h2 class="section-title">Vista previa de la carta natal</h2>
+        <p class="section-text">
+          Esta rueda muestra la distribución visual de los signos, los ejes principales y los cuerpos celestes calculados a partir de tus datos de nacimiento. Pasa el cursor sobre los símbolos para ver su nombre y referencia.
+        </p>
+
+        <div id="chart-shell" class="chart-shell">
+          <div class="chart-ring chart-ring-outer"></div>
+          <div class="chart-ring chart-ring-middle"></div>
+          <div class="chart-ring chart-ring-inner"></div>
+          <div class="chart-center-text">La carta aparecerá aquí</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="results" aria-labelledby="results-title">
+      <div class="card results-card">
+        <h2 id="results-title">Resumen principal</h2>
+        <p class="block-description">
+          Este bloque muestra tres referencias básicas de la carta:
+          el Sol, la Luna y el Ascendente.
+        </p>
+
+        <div id="summary-grid" class="summary-grid">
+          <div class="summary-item">
+            <span class="summary-label">☉ Sol</span>
+            <span class="summary-value">Pendiente</span>
+          </div>
+
+          <div class="summary-item">
+            <span class="summary-label">☽ Luna</span>
+            <span class="summary-value">Pendiente</span>
+          </div>
+
+          <div class="summary-item">
+            <span class="summary-label">↑ Ascendente</span>
+            <span class="summary-value">Pendiente</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card results-card">
+        <h2>Planetas y puntos</h2>
+        <p class="block-description">
+          Aquí verás en qué signo está cada astro o punto importante, en qué grado exacto se encuentra
+          y, si lo deseas, podrás desplegar sus datos técnicos.
+        </p>
+        <div id="planets-container">
+          <p class="placeholder">Aquí mostraremos los astros devueltos por la API.</p>
+        </div>
+      </div>
+
+      <div class="card results-card">
+        <h2>Ejes principales</h2>
+        <p class="block-description">
+          Los ejes marcan puntos clave de la carta, como Ascendente, Descendente,
+          Medio Cielo y Fondo del Cielo.
+        </p>
+        <div id="axes-container">
+          <p class="placeholder">Aquí mostraremos los ejes principales.</p>
+        </div>
+      </div>
+
+      <div class="card results-card">
+        <h2>Casas</h2>
+        <p class="block-description">
+          Las casas dividen la carta en 12 áreas. Aquí mostramos la cúspide de cada casa,
+          es decir, el signo y el grado donde empieza cada una.
+        </p>
+        <div id="houses-container">
+          <p class="placeholder">Aquí mostraremos las 12 casas astrológicas.</p>
+        </div>
+      </div>
+
+      <div class="card results-card">
+        <h2>Aspectos</h2>
+        <p class="block-description">
+          Los aspectos son relaciones angulares entre planetas y otros puntos de la carta.
+          Ayudan a entender cómo interactúan entre sí.
+        </p>
+        <div id="aspects-container">
+          <p class="placeholder">Aquí mostraremos los aspectos encontrados entre los astros.</p>
+        </div>
+      </div>
+    </section>
+    </div>
+    <section class="faq-section">
+      <h2>Preguntas frecuentes</h2>
+
+      <div class="faq-item">
+        <h3>¿Qué es una carta natal?</h3>
+        <p>Una carta natal es una representación del cielo en el momento exacto de tu nacimiento. Muestra la posición del Sol, la Luna, los planetas y las casas astrológicas.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>¿Qué representan los planetas?</h3>
+        <p>Cada planeta simboliza una función distinta dentro de la astrología. Por ejemplo, el Sol representa la identidad, la Luna el mundo emocional, Mercurio la comunicación y Venus los vínculos.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>¿Qué son las casas astrológicas?</h3>
+        <p>Las doce casas representan distintas áreas de la vida, como relaciones, trabajo, hogar, propósito personal y desarrollo interior.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>¿Qué son los aspectos?</h3>
+        <p>Los aspectos son relaciones angulares entre planetas. Ayudan a entender cómo interactúan las energías dentro de una carta natal.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>¿Qué tan precisa es esta carta?</h3>
+        <p>La carta se calcula con datos astronómicos y posiciones planetarias precisas. La interpretación depende del enfoque astrológico y del contexto personal.</p>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
